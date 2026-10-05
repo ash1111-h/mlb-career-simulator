@@ -1,0 +1,65 @@
+id,name,type,cat,pos,era,country,team,Con,Pow,Dis,Vis,Clu,Spd,Def,Frm
+ruth,Babe Ruth,H,L,RF,GA,USA,Yankees,90,99,97,92,95,60,70,85
+williams,Ted Williams,H,L,LF,GA,USA,Red Sox,97,92,99,99,93,55,55,80
+mays,Willie Mays,H,L,CF,EX,USA,Giants,92,93,82,88,90,90,99,75
+aaron,Hank Aaron,H,L,RF,EX,USA,Braves,93,92,85,88,92,75,82,78
+mantle,Mickey Mantle,H,L,CF,GA,USA,Yankees,88,97,92,86,90,88,75,82
+gehrig,Lou Gehrig,H,L,1B,GA,USA,Yankees,93,94,93,88,96,60,75,85
+bonds,Barry Bonds,H,L,LF,PE,USA,Giants,92,99,99,99,88,78,80,80
+cobb,Ty Cobb,H,L,CF,DB,USA,Tigers,99,70,85,92,90,90,80,75
+henderson,Rickey Henderson,H,L,LF,EX,USA,Athletics,80,72,98,92,82,99,78,70
+ichiro,Ichiro Suzuki,H,L,RF,PE,JPN,Mariners,98,50,60,96,78,92,92,62
+gwynn,Tony Gwynn,H,L,RF,EX,USA,Padres,98,52,88,96,80,60,70,60
+jeter,Derek Jeter,H,L,SS,PE,USA,Yankees,88,62,82,85,96,78,75,82
+pujols,Albert Pujols,H,L,1B,PE,DOM,Cardinals,94,94,92,92,88,45,75,82
+griffey,Ken Griffey Jr.,H,L,CF,PE,USA,Mariners,88,93,82,86,85,82,96,85
+piazza,Mike Piazza,H,L,C,PE,USA,Mets,90,92,78,80,80,40,55,85
+ripken,Cal Ripken Jr.,H,L,SS,EX,USA,Orioles,82,80,75,78,85,55,88,92
+dimaggio,Joe DiMaggio,H,L,CF,GA,USA,Yankees,90,88,85,90,92,68,88,85
+clemente,Roberto Clemente,H,L,RF,EX,PRI,Pirates,92,82,60,90,88,82,97,72
+frobinson,Frank Robinson,H,L,RF,EX,USA,Orioles,88,92,88,86,90,78,80,80
+musial,Stan Musial,H,L,LF,GA,USA,Cardinals,96,88,92,94,88,70,75,78
+bench,Johnny Bench,H,L,C,EX,USA,Reds,82,90,72,80,90,55,97,85
+schmidt,Mike Schmidt,H,L,3B,EX,USA,Phillies,80,96,92,88,85,72,95,85
+ozzie,Ozzie Smith,H,L,SS,EX,USA,Cardinals,76,36,80,86,78,88,99,60
+bagwell,Jeff Bagwell,H,L,1B,PE,USA,Astros,86,90,96,88,80,72,72,75
+fthomas,Frank Thomas,H,L,1B,PE,USA,White Sox,92,94,98,92,82,40,50,99
+ortiz,David Ortiz,H,L,DH,PE,DOM,Red Sox,86,94,88,84,99,35,40,88
+vladsr,Vladimir Guerrero,H,L,RF,PE,DOM,Expos,96,90,50,90,80,68,78,80
+miggy,Miguel Cabrera,H,L,1B,PE,VEN,Tigers,97,94,90,92,85,40,55,85
+mauer,Joe Mauer,H,L,C,PE,USA,Twins,94,62,92,88,80,45,70,88
+jrobinson,Jackie Robinson,H,L,2B,GA,USA,Dodgers,86,66,90,86,92,92,82,70
+joemorgan,Joe Morgan,H,L,2B,EX,USA,Reds,82,68,96,90,85,88,88,45
+trout,Mike Trout,H,A,CF,MD,USA,Angels,90,95,97,92,86,88,88,80
+judge,Aaron Judge,H,A,RF,MD,USA,Yankees,82,99,96,92,86,62,80,99
+ohtani,Shohei Ohtani,H,A,DH,MD,JPN,Dodgers,88,99,92,92,90,85,60,95
+betts,Mookie Betts,H,A,SS,MD,USA,Dodgers,90,88,92,92,86,84,94,60
+soto,Juan Soto,H,A,RF,MD,DOM,Mets,92,92,99,98,86,65,60,82
+acuna,Ronald Acuña Jr.,H,A,RF,MD,VEN,Braves,88,92,86,86,82,97,86,78
+witt,Bobby Witt Jr.,H,A,SS,MD,USA,Royals,92,86,70,82,84,94,92,80
+freeman,Freddie Freeman,H,A,1B,MD,USA,Dodgers,96,86,92,92,86,50,78,82
+jramirez,José Ramírez,H,A,3B,MD,DOM,Guardians,90,88,86,92,90,86,82,60
+tatis,Fernando Tatis Jr.,H,A,RF,MD,DOM,Padres,84,92,80,82,82,90,88,80
+jrod,Julio Rodríguez,H,A,CF,MD,DOM,Mariners,85,88,72,78,82,86,84,85
+gunnar,Gunnar Henderson,H,A,SS,MD,USA,Orioles,86,92,84,84,84,80,82,88
+elly,Elly De La Cruz,H,A,SS,MD,DOM,Reds,76,86,66,70,76,99,84,92
+yordan,Yordan Álvarez,H,A,DH,MD,CUB,Astros,92,96,90,90,88,35,40,88
+vladjr,Vladimir Guerrero Jr.,H,A,1B,MD,DOM,Blue Jays,94,92,86,86,82,40,60,78
+tucker,Kyle Tucker,H,A,RF,MD,USA,Astros,88,90,90,90,84,80,82,82
+lindor,Francisco Lindor,H,A,SS,MD,PRI,Mets,84,84,82,84,86,80,95,58
+seager,Corey Seager,H,A,SS,MD,USA,Rangers,90,92,86,88,92,50,78,90
+machado,Manny Machado,H,A,3B,MD,DOM,Padres,86,88,78,82,84,60,90,88
+turner,Trea Turner,H,A,SS,MD,USA,Phillies,90,76,72,80,84,96,80,78
+devers,Rafael Devers,H,A,3B,MD,DOM,Red Sox,90,92,86,86,86,40,60,70
+altuve,José Altuve,H,A,2B,MD,VEN,Astros,96,78,80,88,86,78,76,30
+alonso,Pete Alonso,H,A,1B,MD,USA,Mets,78,94,80,78,82,40,60,85
+harper,Bryce Harper,H,A,1B,MD,USA,Phillies,88,94,95,90,88,62,70,85
+raleigh,Cal Raleigh,H,A,C,MD,USA,Mariners,70,95,80,82,88,35,80,80
+arod,Alex Rodriguez,H,L,3B,PE,USA,Yankees,89,96,91,89,86,73,71,84
+dawson,Andre Dawson,H,L,RF,EX,USA,Expos,88,92,78,82,88,78,82,84
+posey,Buster Posey,H,L,C,PE,USA,Giants,90,78,82,84,92,45,97,80
+yogi,Yogi Berra,H,L,C,GA,USA,Yankees,86,76,80,86,94,35,90,78
+beltran,Carlos Beltrán,H,L,CF,PE,PRI,Astros,89,87,80,88,82,78,82,70
+stanton,Giancarlo Stanton,H,A,RF,MD,USA,Yankees,81,99,70,80,89,55,60,94
+moncada,Yoán Moncada,H,A,3B,MD,CUB,White Sox,84,88,76,83,84,72,86,78
+ingram,Mookie Betts,H,A,RF,MD,USA,Dodgers,90,88,92,92,86,84,94,60

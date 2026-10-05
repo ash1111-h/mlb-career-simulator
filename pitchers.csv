@@ -1,0 +1,40 @@
+id,name,type,cat,role,era,country,team,Vel,Brk,Str,GB,Cmd,Clu,Def,Frm,Sta
+ryan,Nolan Ryan,P,L,SP,EX,USA,Rangers,99,90,99,60,45,75,55,88,96
+koufax,Sandy Koufax,P,L,SP,EX,USA,Dodgers,92,99,95,60,82,88,60,80,88
+gibson,Bob Gibson,P,L,SP,EX,USA,Cardinals,92,90,92,70,85,95,90,82,98
+maddux,Greg Maddux,P,L,SP,PE,USA,Braves,76,92,70,75,99,90,98,60,95
+rjohnson,Randy Johnson,P,L,SP,PE,USA,Mariners,99,97,99,55,72,85,60,99,92
+pedro,Pedro Martínez,P,L,SP,PE,DOM,Red Sox,96,98,98,55,95,88,60,40,80
+clemens,Roger Clemens,P,L,SP,PE,USA,Red Sox,96,90,96,60,85,86,70,90,95
+seaver,Tom Seaver,P,L,SP,EX,USA,Mets,92,88,92,62,88,86,75,80,96
+wjohnson,Walter Johnson,P,L,SP,DB,USA,Senators,97,70,88,60,92,88,60,85,99
+rivera,Mariano Rivera,P,L,CL,PE,PAN,Yankees,90,98,80,70,98,99,60,82,35
+kershaw,Clayton Kershaw,P,L,SP,MD,USA,Dodgers,88,98,92,60,94,70,70,82,86
+felix,Félix Hernández,P,L,SP,MD,VEN,Mariners,94,95,88,82,86,76,65,85,92
+hoffman,Trevor Hoffman,P,L,CL,PE,USA,Padres,82,90,85,50,95,95,55,80,35
+eckersley,Dennis Eckersley,P,L,CL,EX,USA,Athletics,84,88,86,55,99,92,60,82,55
+palmer,Jim Palmer,P,L,SP,EX,USA,Orioles,86,86,78,78,92,88,80,85,92
+carlton,Steve Carlton,P,L,SP,EX,USA,Phillies,90,97,92,60,82,88,70,88,98
+ford,Whitey Ford,P,L,SP,GA,USA,Yankees,82,86,80,78,94,94,80,50,88
+grove,Lefty Grove,P,L,SP,GA,USA,Athletics,96,88,92,60,78,88,60,82,92
+spahn,Warren Spahn,P,L,SP,GA,USA,Braves,82,88,80,70,94,86,82,76,99
+marichal,Juan Marichal,P,L,SP,EX,DOM,Giants,88,92,84,72,98,88,78,76,94
+verlander,Justin Verlander,P,A,SP,MD,USA,Tigers,96,90,94,55,88,85,65,90,92
+scherzer,Max Scherzer,P,A,SP,MD,USA,Nationals,94,92,96,45,86,85,60,82,92
+degrom,Jacob deGrom,P,A,SP,MD,USA,Mets,99,97,97,50,92,80,60,85,70
+cole,Gerrit Cole,P,A,SP,MD,USA,Yankees,96,90,94,45,86,80,70,88,86
+wheeler,Zack Wheeler,P,A,SP,MD,USA,Phillies,96,88,92,60,86,82,70,88,88
+skubal,Tarik Skubal,P,A,SP,MD,USA,Tigers,96,92,96,50,92,82,65,90,84
+skenes,Paul Skenes,P,A,SP,MD,USA,Pirates,99,90,96,60,88,80,70,95,82
+strider,Spencer Strider,P,A,SP,MD,USA,Braves,98,92,98,35,78,78,55,72,66
+burnes,Corbin Burnes,P,A,SP,MD,USA,Diamondbacks,94,95,92,70,90,82,70,82,84
+yamamoto,Yoshinobu Yamamoto,P,A,SP,MD,JPN,Dodgers,92,92,92,60,92,82,70,52,82
+alcantara,Sandy Alcántara,P,A,SP,MD,DOM,Marlins,96,90,70,92,86,84,86,90,96
+sale,Chris Sale,P,A,SP,MD,USA,Braves,93,97,98,45,90,80,60,92,78
+hader,Josh Hader,P,A,CL,MD,USA,Astros,94,92,96,40,70,82,55,80,35
+diaz,Edwin Díaz,P,A,CL,MD,PRI,Mets,99,96,98,40,78,78,55,72,35
+bieber,Shane Bieber,P,A,SP,MD,USA,Guardians,90,92,92,60,95,76,65,82,80
+glavine,Tom Glavine,P,L,SP,PE,USA,Braves,86,92,88,62,94,90,75,76,97
+halladay,Roy Halladay,P,L,SP,PE,USA,Phillies,94,93,92,70,92,86,78,84,96
+smoltz,John Smoltz,P,L,SP,PE,USA,Braves,94,90,94,45,83,83,60,85,92
+schilling,Curt Schilling,P,L,SP,PE,USA,Red Sox,94,91,95,60,89,88,62,82,90

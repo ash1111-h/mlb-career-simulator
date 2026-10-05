@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rookie to Legend</title>
+  <style>
+    :root {
+      --bg: #0b1320;
+      --panel: #111d2c;
+      --panel-2: #182a3e;
+      --muted: #9bb0c8;
+      --text: #edf4ff;
+      --gold: #f5c76b;
+      --silver: #dfe7f5;
+      --bronze: #d0915a;
+      --legend: #b785ff;
+      --diamond: #66d8ff;
+      --good: #67d294;
+      --bad: #ff7a7a;
+      --shadow: rgba(0,0,0,.28);
+      --slot: rgb(116,149,179);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; background: linear-gradient(180deg, #081018, var(--bg));
+      color: var(--text); font-family: Inter, "Segoe UI", Arial, sans-serif; min-height: 100vh;
+    }
+    body { padding: 24px; }
+    h1, h2, h3, p { margin: 0; }
+    .app {
+      max-width: 1280px; margin: 0 auto;
+    }
+    .topbar {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 16px; margin-bottom: 18px;
+    }
+    .brand {
+      font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .brand .accent { color: var(--gold); }
+    .modeSelector {
+      display: flex; gap: 12px; flex-wrap: wrap;
+    }
+    .pill {
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+      border-radius: 999px; padding: 12px 18px; color: var(--text); cursor: pointer;
+      transition: .2s ease; user-select: none;
+    }
+    .pill.active {
+      background: linear-gradient(135deg, rgba(245,199,107,.15), rgba(103,210,148,.1));
+      border-color: rgba(245,199,107,.6); color: var(--gold);
+    }
+    .panel {
+      background: linear-gradient(180deg, rgba(17,29,44,.96), rgba(12,20,30,.96));
+      border: 1px solid rgba(255,255,255,.08); border-radius: 18px; box-shadow: 0 16px 28px var(--shadow);
+      padding: 18px; margin-bottom: 18px;
+    }
+    .originGrid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 18px;
+    }
+    .field {
+      display: flex; flex-direction: column; gap: 8px;
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 12px;
+    }
+    .field label { font-size: .74rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+    select, input {
+      width: 100%; background: rgba(8,16,24,.7); border: 1px solid rgba(255,255,255,.1); border-radius: 8px; color: var(--text); padding: 10px 12px; font-size: 1rem;
+    }
+    .buildWrap {
+      display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px;
+    }
+    .reelCard {
+      background: radial-gradient(circle at top, rgba(179,213,255,.12), rgba(28,42,62,.3)); border: 1px solid rgba(255,255,255,.1); border-radius: 18px; padding: 18px; min-height: 250px;
+      display: flex; flex-direction: column; justify-content: space-between; gap: 14px;
+    }
+    .playerHeadline { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .playerName { font-size: 1.6rem; font-weight: 700; }
+    .playerMeta { color: var(--muted); font-size: .82rem; }
+    .bigRating {
+      font-size: 3rem; font-weight: 900; line-height: 1; color: var(--gold);
+    }
+    .slotBoard {
+      display: grid; grid-template-columns: repeat(2, minmax(120px,1fr)); gap: 12px;
+    }
+    .slot {
+      border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); border-radius: 12px; padding: 10px; min-height: 96px; cursor: pointer; transition: .2s ease; display: flex; flex-direction: column; justify-content: center;
+    }
+    .slot:hover { transform: translateY(-1px); border-color: rgba(245,199,107,.5); }
+    .slotLabel { font-size: .72rem; color: var(--muted); text-transform: uppercase; }
+    .slotValue { font-size: 1.8rem; font-weight: 800; }
+    .slot.filled { background: rgba(103,210,148,.08); border-color: rgba(103,210,148,.5); }
+    .slot.empty { opacity: .9; }
+    .actions {
+      display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px;
+    }
+    .button {
+      background: linear-gradient(135deg, rgba(245,199,107,.18), rgba(139,105,255,.16)); border: 1px solid rgba(245,199,107,.5); border-radius: 10px; color: var(--text); padding: 10px 16px; cursor: pointer; font-weight: 700;
+    }
+    .button.secondary { background: rgba(255,255,255,.03); border-color: rgba(255,255,255,.08); }
+    .button.warn { background: linear-gradient(135deg, rgba(255,122,122,.2), rgba(219,129,80,.12)); border-color: rgba(255,122,122,.4); }
+    .statsPanel {
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .metricBox {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 14px;
+    }
+    .metricBox .label { color: var(--muted); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
+    .metricBox .value { font-size: 2.2rem; font-weight: 800; margin-top: 8px; }
+    .powerList {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;
+    }
+    .tag {
+      font-size: .72rem; border-radius: 999px; padding: 5px 9px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); color: var(--muted);
+    }
+    .tag.good { border-color: rgba(103,210,148,.4); color: var(--good); }
+    .tag.legend { border-color: rgba(183,133,255,.5); color: var(--legend); }
+    .statsGrid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(100px,1fr)); gap: 12px;
+      margin-top: 8px;
+    }
+    .miniStat { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 10px; padding: 10px; }
+    .miniStat .k { font-size: .7rem; color: var(--muted); text-transform: uppercase; }
+    .miniStat .v { margin-top: 6px; font-size: 1.4rem; font-weight: 800; }
+    .careerSection { display: none; }
+    .careerSection.visible { display: block; }
+    .seasonList { display: grid; gap: 12px; }
+    .seasonCard {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 12px;
+    }
+    .seasonTop { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .seasonMeta { color: var(--muted); font-size: .82rem; }
+    .timeline { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { font-size: .72rem; border-radius: 999px; padding: 5px 8px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); color: var(--muted); }
+    @media (max-width: 900px) {
+      .buildWrap { grid-template-columns: 1fr; }
+      .slotBoard { grid-template-columns: repeat(2, minmax(100px,1fr)); }
+      body { padding: 14px; }
+      .topbar { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">Rookie <span class="accent">to Legend</span></div>
+      <div class="modeSelector">
+        <div class="pill active" data-mode="hitter">Hitter</div>
+        <div class="pill" data-mode="pitcher">Pitcher</div>
+      </div>
+    </div>
+
+    <section class="panel">
+      <div class="originGrid">
+        <div class="field">
+          <label>Name</label>
+          <input id="nameInput" value="Rookie" maxlength="24" />
+        </div>
+        <div class="field">
+          <label>Handedness</label>
+          <select id="handInput">
+            <option value="R">R</option>
+            <option value="L">L</option>
+            <option value="S">S</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Position / Role</label>
+          <select id="positionInput"></select>
+        </div>
+        <div class="field">
+          <label>Origin</label>
+          <select id="originInput">
+            <option value="High School">High School</option>
+            <option value="College">College</option>
+            <option value="International">International</option>
+            <option value="Independent League">Independent League</option>
+            <option value="Overseas Pro">Overseas Pro</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Archetype</label>
+          <select id="archetypeInput"></select>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="buildWrap">
+        <div class="reelCard">
+          <div class="playerHeadline">
+            <div>
+              <div class="playerMeta" id="playerMetaLabel">Current card</div>
+              <div class="playerName" id="playerName">Waiting for a spin</div>
+            </div>
+            <div class="bigRating" id="reelOverall">--</div>
+          </div>
+          <div id="reelAttributes" class="statsGrid"></div>
+          <div class="actions">
+            <button id="spinBtn" class="button">Spin Build</button>
+            <button id="autoFillBtn" class="button secondary">Quick Fill</button>
+            <button id="resetBtn" class="button warn">Reset</button>
+          </div>
+        </div>
+
+        <div class="statsPanel">
+          <div class="metricBox">
+            <div class="label">Projected Overall</div>
+            <div class="value" id="projectedOverall">0</div>
+          </div>
+          <div class="metricBox">
+            <div class="label">Build Status</div>
+            <div class="value" id="buildStatus">0 / 8</div>
+            <div class="powerList" id="powerTagList"></div>
+          </div>
+          <div class="metricBox">
+            <div class="label">Draft Stock</div>
+            <div class="value" id="draftStock">--</div>
+          </div>
+          <div class="actions">
+            <button id="careerBtn" class="button">Start Career</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="slotBoard" id="slotBoard"></div>
+    </section>
+
+    <section class="panel careerSection" id="careerSection">
+      <h2>Career Summary</h2>
+      <div id="careerSummary" class="statsGrid" style="margin-top: 10px"></div>
+      <div class="seasonList" id="seasonList" style="margin-top: 18px"></div>
+    </section>
+  </div>
+
+  <script>
+    const hitterPool = [
+      { id:'ruth', name:'Babe Ruth', era:'GA', country:'USA', team:'Yankees', Con:90, Pow:99, Dis:97, Vis:92, Clu:95, Spd:60, Def:70, Frm:85, pos:'RF', cat:'L' },
+      { id:'williams', name:'Ted Williams', era:'GA', country:'USA', team:'Red Sox', Con:97, Pow:92, Dis:99, Vis:99, Clu:93, Spd:55, Def:55, Frm:80, pos:'LF', cat:'L' },
+      { id:'mays', name:'Willie Mays', era:'EX', country:'USA', team:'Giants', Con:92, Pow:93, Dis:82, Vis:88, Clu:90, Spd:90, Def:99, Frm:75, pos:'CF', cat:'L' },
+      { id:'aaron', name:'Hank Aaron', era:'EX', country:'USA', team:'Braves', Con:93, Pow:92, Dis:85, Vis:88, Clu:92, Spd:75, Def:82, Frm:78, pos:'RF', cat:'L' },
+      { id:'mantle', name:'Mickey Mantle', era:'GA', country:'USA', team:'Yankees', Con:88, Pow:97, Dis:92, Vis:86, Clu:90, Spd:88, Def:75, Frm:82, pos:'CF', cat:'L' },
+      { id:'gehrig', name:'Lou Gehrig', era:'GA', country:'USA', team:'Yankees', Con:93, Pow:94, Dis:93, Vis:88, Clu:96, Spd:60, Def:75, Frm:85, pos:'1B', cat:'L' },
+      { id:'bonds', name:'Barry Bonds', era:'PE', country:'USA', team:'Giants', Con:92, Pow:99, Dis:99, Vis:99, Clu:88, Spd:78, Def:80, Frm:80, pos:'LF', cat:'L' },
+      { id:'cobb', name:'Ty Cobb', era:'DB', country:'USA', team:'Tigers', Con:99, Pow:70, Dis:85, Vis:92, Clu:90, Spd:90, Def:80, Frm:75, pos:'CF', cat:'L' },
+      { id:'henderson', name:'Rickey Henderson', era:'EX', country:'USA', team:'Athletics', Con:80, Pow:72, Dis:98, Vis:92, Clu:82, Spd:99, Def:78, Frm:70, pos:'LF', cat:'L' },
+      { id:'ichiro', name:'Ichiro Suzuki', era:'PE', country:'JPN', team:'Mariners', Con:98, Pow:50, Dis:60, Vis:96, Clu:78, Spd:92, Def:92, Frm:62, pos:'RF', cat:'L' },
+      { id:'gwynn', name:'Tony Gwynn', era:'EX', country:'USA', team:'Padres', Con:98, Pow:52, Dis:88, Vis:96, Clu:80, Spd:60, Def:70, Frm:60, pos:'RF', cat:'L' },
+      { id:'jeter', name:'Derek Jeter', era:'PE', country:'USA', team:'Yankees', Con:88, Pow:62, Dis:82, Vis:85, Clu:96, Spd:78, Def:75, Frm:82, pos:'SS', cat:'L' },
+      { id:'pujols', name:'Albert Pujols', era:'PE', country:'DOM', team:'Cardinals', Con:94, Pow:94, Dis:92, Vis:92, Clu:88, Spd:45, Def:75, Frm:82, pos:'1B', cat:'L' },
+      { id:'griffey', name:'Ken Griffey Jr.', era:'PE', country:'USA', team:'Mariners', Con:88, Pow:93, Dis:82, Vis:86, Clu:85, Spd:82, Def:96, Frm:85, pos:'CF', cat:'L' },
+      { id:'piazza', name:'Mike Piazza', era:'PE', country:'USA', team:'Mets', Con:90, Pow:92, Dis:78, Vis:80, Clu:80, Spd:40, Def:55, Frm:85, pos:'C', cat:'L' },
+      { id:'ripken', name:'Cal Ripken Jr.', era:'EX', country:'USA', team:'Orioles', Con:82, Pow:80, Dis:75, Vis:78, Clu:85, Spd:55, Def:88, Frm:92, pos:'SS', cat:'L' },
+      { id:'dimaggio', name:'Joe DiMaggio', era:'GA', country:'USA', team:'Yankees', Con:90, Pow:88, Dis:85, Vis:90, Clu:92, Spd:68, Def:88, Frm:85, pos:'CF', cat:'L' },
+      { id:'clemente', name:'Roberto Clemente', era:'EX', country:'PRI', team:'Pirates', Con:92, Pow:82, Dis:60, Vis:90, Clu:88, Spd:82, Def:97, Frm:72, pos:'RF', cat:'L' },
+      { id:'frobinson', name:'Frank Robinson', era:'EX', country:'USA', team:'Orioles', Con:88, Pow:92, Dis:88, Vis:86, Clu:90, Spd:78, Def:80, Frm:80, pos:'RF', cat:'L' },
+      { id:'musial', name:'Stan Musial', era:'GA', country:'USA', team:'Cardinals', Con:96, Pow:88, Dis:92, Vis:94, Clu:88, Spd:70, Def:75, Frm:78, pos:'LF', cat:'L' },
+      { id:'bench', name:'Johnny Bench', era:'EX', country:'USA', team:'Reds', Con:82, Pow:90, Dis:72, Vis:80, Clu:90, Spd:55, Def:97, Frm:85, pos:'C', cat:'L' },
+      { id:'schmidt', name:'Mike Schmidt', era:'EX', country:'USA', team:'Phillies', Con:80, Pow:96, Dis:92, Vis:88, Clu:85, Spd:72, Def:95, Frm:85, pos:'3B', cat:'L' },
+      { id:'ozzie', name:'Ozzie Smith', era:'EX', country:'USA', team:'Cardinals', Con:76, Pow:36, Dis:80, Vis:86, Clu:78, Spd:88, Def:99, Frm:60, pos:'SS', cat:'L' },
+      { id:'bagwell', name:'Jeff Bagwell', era:'PE', country:'USA', team:'Astros', Con:86, Pow:90, Dis:96, Vis:88, Clu:80, Spd:72, Def:72, Frm:75, pos:'1B', cat:'L' },
+      { id:'fthomas', name:'Frank Thomas', era:'PE', country:'USA', team:'White Sox', Con:92, Pow:94, Dis:98, Vis:92, Clu:82, Spd:40, Def:50, Frm:99, pos:'1B', cat:'L' },
+      { id:'ortiz', name:'David Ortiz', era:'PE', country:'DOM', team:'Red Sox', Con:86, Pow:94, Dis:88, Vis:84, Clu:99, Spd:35, Def:40, Frm:88, pos:'DH', cat:'L' },
+      { id:'vladsr', name:'Vladimir Guerrero', era:'PE', country:'DOM', team:'Expos', Con:96, Pow:90, Dis:50, Vis:90, Clu:80, Spd:68, Def:78, Frm:80, pos:'RF', cat:'L' },
+      { id:'miggy', name:'Miguel Cabrera', era:'PE', country:'VEN', team:'Tigers', Con:97, Pow:94, Dis:90, Vis:92, Clu:85, Spd:40, Def:55, Frm:85, pos:'1B', cat:'L' },
+      { id:'mauer', name:'Joe Mauer', era:'PE', country:'USA', team:'Twins', Con:94, Pow:62, Dis:92, Vis:88, Clu:80, Spd:45, Def:70, Frm:88, pos:'C', cat:'L' },
+      { id:'jrobinson', name:'Jackie Robinson', era:'GA', country:'USA', team:'Dodgers', Con:86, Pow:66, Dis:90, Vis:86, Clu:92, Spd:92, Def:82, Frm:70, pos:'2B', cat:'L' },
+      { id:'joemorgan', name:'Joe Morgan', era:'EX', country:'USA', team:'Reds', Con:82, Pow:68, Dis:96, Vis:90, Clu:85, Spd:88, Def:88, Frm:45, pos:'2B', cat:'L' },
+      { id:'trout', name:'Mike Trout', era:'MD', country:'USA', team:'Angels', Con:90, Pow:95, Dis:97, Vis:92, Clu:86, Spd:88, Def:88, Frm:80, pos:'CF', cat:'A' },
+      { id:'judge', name:'Aaron Judge', era:'MD', country:'USA', team:'Yankees', Con:82, Pow:99, Dis:96, Vis:92, Clu:86, Spd:62, Def:80, Frm:99, pos:'RF', cat:'A' },
+      { id:'ohtani', name:'Shohei Ohtani', era:'MD', country:'JPN', team:'Dodgers', Con:88, Pow:99, Dis:92, Vis:92, Clu:90, Spd:85, Def:60, Frm:95, pos:'DH', cat:'A' },
+      { id:'betts', name:'Mookie Betts', era:'MD', country:'USA', team:'Dodgers', Con:90, Pow:88, Dis:92, Vis:92, Clu:86, Spd:84, Def:94, Frm:60, pos:'SS', cat:'A' },
+      { id:'soto', name:'Juan Soto', era:'MD', country:'DOM', team:'Mets', Con:92, Pow:92, Dis:99, Vis:98, Clu:86, Spd:65, Def:60, Frm:82, pos:'RF', cat:'A' },
+      { id:'acuna', name:'Ronald Acuña Jr.', era:'MD', country:'VEN', team:'Braves', Con:88, Pow:92, Dis:86, Vis:86, Clu:82, Spd:97, Def:86, Frm:78, pos:'RF', cat:'A' },
+      { id:'witt', name:'Bobby Witt Jr.', era:'MD', country:'USA', team:'Royals', Con:92, Pow:86, Dis:70, Vis:82, Clu:84, Spd:94, Def:92, Frm:80, pos:'SS', cat:'A' },
+      { id:'freeman', name:'Freddie Freeman', era:'MD', country:'USA', team:'Dodgers', Con:96, Pow:86, Dis:92, Vis:92, Clu:86, Spd:50, Def:78, Frm:82, pos:'1B', cat:'A' },
+      { id:'jramirez', name:'José Ramírez', era:'MD', country:'DOM', team:'Guardians', Con:90, Pow:88, Dis:86, Vis:92, Clu:90, Spd:86, Def:82, Frm:60, pos:'3B', cat:'A' },
+      { id:'tatis', name:'Fernando Tatis Jr.', era:'MD', country:'DOM', team:'Padres', Con:84, Pow:92, Dis:80, Vis:82, Clu:82, Spd:90, Def:88, Frm:80, pos:'RF', cat:'A' },
+      { id:'jrod', name:'Julio Rodríguez', era:'MD', country:'DOM', team:'Mariners', Con:85, Pow:88, Dis:72, Vis:78, Clu:82, Spd:86, Def:84, Frm:85, pos:'CF', cat:'A' },
+      { id:'gunnar', name:'Gunnar Henderson', era:'MD', country:'USA', team:'Orioles', Con:86, Pow:92, Dis:84, Vis:84, Clu:84, Spd:80, Def:82, Frm:88, pos:'SS', cat:'A' },
+      { id:'elly', name:'Elly De La Cruz', era:'MD', country:'DOM', team:'Reds', Con:76, Pow:86, Dis:66, Vis:70, Clu:76, Spd:99, Def:84, Frm:92, pos:'SS', cat:'A' },
+      { id:'yordan', name:'Yordan Álvarez', era:'MD', country:'CUB', team:'Astros', Con:92, Pow:96, Dis:90, Vis:90, Clu:88, Spd:35, Def:40, Frm:88, pos:'DH', cat:'A' },
+      { id:'vladjr', name:'Vladimir Guerrero Jr.', era:'MD', country:'DOM', team:'Blue Jays', Con:94, Pow:92, Dis:86, Vis:86, Clu:82, Spd:40, Def:60, Frm:78, pos:'1B', cat:'A' },
+      { id:'tucker', name:'Kyle Tucker', era:'MD', country:'USA', team:'Astros', Con:88, Pow:90, Dis:90, Vis:90, Clu:84, Spd:80, Def:82, Frm:82, pos:'RF', cat:'A' },
+      { id:'lindor', name:'Francisco Lindor', era:'MD', country:'PRI', team:'Mets', Con:84, Pow:84, Dis:82, Vis:84, Clu:86, Spd:80, Def:95, Frm:58, pos:'SS', cat:'A' },
+      { id:'seager', name:'Corey Seager', era:'MD', country:'USA', team:'Rangers', Con:90, Pow:92, Dis:86, Vis:88, Clu:92, Spd:50, Def:78, Frm:90, pos:'SS', cat:'A' },
+      { id:'machado', name:'Manny Machado', era:'MD', country:'DOM', team:'Padres', Con:86, Pow:88, Dis:78, Vis:82, Clu:84, Spd:60, Def:90, Frm:88, pos:'3B', cat:'A' },
+      { id:'turner', name:'Trea Turner', era:'MD', country:'USA', team:'Phillies', Con:90, Pow:76, Dis:72, Vis:80, Clu:84, Spd:96, Def:80, Frm:78, pos:'SS', cat:'A' },
+      { id:'devers', name:'Rafael Devers', era:'MD', country:'DOM', team:'Red Sox', Con:90, Pow:92, Dis:86, Vis:86, Clu:86, Spd:40, Def:60, Frm:70, pos:'3B', cat:'A' },
+      { id:'altuve', name:'José Altuve', era:'MD', country:'VEN', team:'Astros', Con:96, Pow:78, Dis:80, Vis:88, Clu:86, Spd:78, Def:76, Frm:30, pos:'2B', cat:'A' },
+      { id:'alonso', name:'Pete Alonso', era:'MD', country:'USA', team:'Mets', Con:78, Pow:94, Dis:80, Vis:78, Clu:82, Spd:40, Def:60, Frm:85, pos:'1B', cat:'A' },
+      { id:'harper', name:'Bryce Harper', era:'MD', country:'USA', team:'Phillies', Con:88, Pow:94, Dis:95, Vis:90, Clu:88, Spd:62, Def:70, Frm:85, pos:'1B', cat:'A' },
+      { id:'raleigh', name:'Cal Raleigh', era:'MD', country:'USA', team:'Mariners', Con:70, Pow:95, Dis:80, Vis:82, Clu:88, Spd:35, Def:80, Frm:80, pos:'C', cat:'A' },
+      { id:'arod', name:'Alex Rodriguez', era:'PE', country:'USA', team:'Yankees', Con:89, Pow:96, Dis:91, Vis:89, Clu:86, Spd:73, Def:71, Frm:84, pos:'3B', cat:'L' },
+      { id:'dawson', name:'Andre Dawson', era:'EX', country:'USA', team:'Expos', Con:88, Pow:92, Dis:78, Vis:82, Clu:88, Spd:78, Def:82, Frm:84, pos:'RF', cat:'L' },
+      { id:'posey', name:'Buster Posey', era:'PE', country:'USA', team:'Giants', Con:90, Pow:78, Dis:82, Vis:84, Clu:92, Spd:45, Def:97, Frm:80, pos:'C', cat:'L' },
+      { id:'yogi', name:'Yogi Berra', era:'GA', country:'USA', team:'Yankees', Con:86, Pow:76, Dis:80, Vis:86, Clu:94, Spd:35, Def:90, Frm:78, pos:'C', cat:'L' },
+      { id:'beltran', name:'Carlos Beltrán', era:'PE', country:'PRI', team:'Astros', Con:89, Pow:87, Dis:80, Vis:88, Clu:82, Spd:78, Def:82, Frm:70, pos:'CF', cat:'L' },
+      { id:'stanton', name:'Giancarlo Stanton', era:'MD', country:'USA', team:'Yankees', Con:81, Pow:99, Dis:70, Vis:80, Clu:89, Spd:55, Def:60, Frm:94, pos:'RF', cat:'A' },
+      { id:'moncada', name:'Yoán Moncada', era:'MD', country:'CUB', team:'White Sox', Con:84, Pow:88, Dis:76, Vis:83, Clu:84, Spd:72, Def:86, Frm:78, pos:'3B', cat:'A' },
+      { id:'ingram', name:'Mookie Betts', era:'MD', country:'USA', team:'Dodgers', Con:90, Pow:88, Dis:92, Vis:92, Clu:86, Spd:84, Def:94, Frm:60, pos:'RF', cat:'A' }
+    ];
+
+    const pitcherPool = [
+      { id:'ryan', name:'Nolan Ryan', era:'EX', country:'USA', team:'Rangers', Vel:99, Brk:90, Str:99, GB:60, Cmd:45, Clu:75, Def:55, Frm:88, Sta:96, role:'SP', cat:'L' },
+      { id:'koufax', name:'Sandy Koufax', era:'EX', country:'USA', team:'Dodgers', Vel:92, Brk:99, Str:95, GB:60, Cmd:82, Clu:88, Def:60, Frm:80, Sta:88, role:'SP', cat:'L' },
+      { id:'gibson', name:'Bob Gibson', era:'EX', country:'USA', team:'Cardinals', Vel:92, Brk:90, Str:92, GB:70, Cmd:85, Clu:95, Def:90, Frm:82, Sta:98, role:'SP', cat:'L' },
+      { id:'maddux', name:'Greg Maddux', era:'PE', country:'USA', team:'Braves', Vel:76, Brk:92, Str:70, GB:75, Cmd:99, Clu:90, Def:98, Frm:60, Sta:95, role:'SP', cat:'L' },
+      { id:'rjohnson', name:'Randy Johnson', era:'PE', country:'USA', team:'Mariners', Vel:99, Brk:97, Str:99, GB:55, Cmd:72, Clu:85, Def:60, Frm:99, Sta:92, role:'SP', cat:'L' },
+      { id:'pedro', name:'Pedro Martínez', era:'PE', country:'DOM', team:'Red Sox', Vel:96, Brk:98, Str:98, GB:55, Cmd:95, Clu:88, Def:60, Frm:40, Sta:80, role:'SP', cat:'L' },
+      { id:'clemens', name:'Roger Clemens', era:'PE', country:'USA', team:'Red Sox', Vel:96, Brk:90, Str:96, GB:60, Cmd:85, Clu:86, Def:70, Frm:90, Sta:95, role:'SP', cat:'L' },
+      { id:'seaver', name:'Tom Seaver', era:'EX', country:'USA', team:'Mets', Vel:92, Brk:88, Str:92, GB:62, Cmd:88, Clu:86, Def:75, Frm:80, Sta:96, role:'SP', cat:'L' },
+      { id:'wjohnson', name:'Walter Johnson', era:'DB', country:'USA', team:'Senators', Vel:97, Brk:70, Str:88, GB:60, Cmd:92, Clu:88, Def:60, Frm:85, Sta:99, role:'SP', cat:'L' },
+      { id:'rivera', name:'Mariano Rivera', era:'PE', country:'PAN', team:'Yankees', Vel:90, Brk:98, Str:80, GB:70, Cmd:98, Clu:99, Def:60, Frm:82, Sta:35, role:'CL', cat:'L' },
+      { id:'kershaw', name:'Clayton Kershaw', era:'MD', country:'USA', team:'Dodgers', Vel:88, Brk:98, Str:92, GB:60, Cmd:94, Clu:70, Def:70, Frm:82, Sta:86, role:'SP', cat:'A' },
+      { id:'felix', name:'Félix Hernández', era:'MD', country:'VEN', team:'Mariners', Vel:94, Brk:95, Str:88, GB:82, Cmd:86, Clu:76, Def:65, Frm:85, Sta:92, role:'SP', cat:'A' },
+      { id:'hoffman', name:'Trevor Hoffman', era:'PE', country:'USA', team:'Padres', Vel:82, Brk:90, Str:85, GB:50, Cmd:95, Clu:95, Def:55, Frm:80, Sta:35, role:'CL', cat:'L' },
+      { id:'eckersley', name:'Dennis Eckersley', era:'EX', country:'USA', team:'Athletics', Vel:84, Brk:88, Str:86, GB:55, Cmd:99, Clu:92, Def:60, Frm:82, Sta:55, role:'CL', cat:'L' },
+      { id:'palmer', name:'Jim Palmer', era:'EX', country:'USA', team:'Orioles', Vel:86, Brk:86, Str:78, GB:78, Cmd:92, Clu:88, Def:80, Frm:85, Sta:92, role:'SP', cat:'L' },
+      { id:'carlton', name:'Steve Carlton', era:'EX', country:'USA', team:'Phillies', Vel:90, Brk:97, Str:92, GB:60, Cmd:82, Clu:88, Def:70, Frm:88, Sta:98, role:'SP', cat:'L' },
+      { id:'ford', name:'Whitey Ford', era:'GA', country:'USA', team:'Yankees', Vel:82, Brk:86, Str:80, GB:78, Cmd:94, Clu:94, Def:80, Frm:50, Sta:88, role:'SP', cat:'L' },
+      { id:'grove', name:'Lefty Grove', era:'GA', country:'USA', team:'Athletics', Vel:96, Brk:88, Str:92, GB:60, Cmd:78, Clu:88, Def:60, Frm:82, Sta:92, role:'SP', cat:'L' },
+      { id:'spahn', name:'Warren Spahn', era:'GA', country:'USA', team:'Braves', Vel:82, Brk:88, Str:80, GB:70, Cmd:94, Clu:86, Def:82, Frm:76, Sta:99, role:'SP', cat:'L' },
+      { id:'marichal', name:'Juan Marichal', era:'EX', country:'DOM', team:'Giants', Vel:88, Brk:92, Str:84, GB:72, Cmd:98, Clu:88, Def:78, Frm:76, Sta:94, role:'SP', cat:'L' },
+      { id:'verlander', name:'Justin Verlander', era:'MD', country:'USA', team:'Tigers', Vel:96, Brk:90, Str:94, GB:55, Cmd:88, Clu:85, Def:65, Frm:90, Sta:92, role:'SP', cat:'A' },
+      { id:'scherzer', name:'Max Scherzer', era:'MD', country:'USA', team:'Nationals', Vel:94, Brk:92, Str:96, GB:45, Cmd:86, Clu:85, Def:60, Frm:82, Sta:92, role:'SP', cat:'A' },
+      { id:'degrom', name:'Jacob deGrom', era:'MD', country:'USA', team:'Mets', Vel:99, Brk:97, Str:97, GB:50, Cmd:92, Clu:80, Def:60, Frm:85, Sta:70, role:'SP', cat:'A' },
+      { id:'cole', name:'Gerrit Cole', era:'MD', country:'USA', team:'Yankees', Vel:96, Brk:90, Str:94, GB:45, Cmd:86, Clu:80, Def:70, Frm:88, Sta:86, role:'SP', cat:'A' },
+      { id:'wheeler', name:'Zack Wheeler', era:'MD', country:'USA', team:'Phillies', Vel:96, Brk:88, Str:92, GB:60, Cmd:86, Clu:82, Def:70, Frm:88, Sta:88, role:'SP', cat:'A' },
+      { id:'skubal', name:'Tarik Skubal', era:'MD', country:'USA', team:'Tigers', Vel:96, Brk:92, Str:96, GB:50, Cmd:92, Clu:82, Def:65, Frm:90, Sta:84, role:'SP', cat:'A' },
+      { id:'skenes', name:'Paul Skenes', era:'MD', country:'USA', team:'Pirates', Vel:99, Brk:90, Str:96, GB:60, Cmd:88, Clu:80, Def:70, Frm:95, Sta:82, role:'SP', cat:'A' },
+      { id:'strider', name:'Spencer Strider', era:'MD', country:'USA', team:'Braves', Vel:98, Brk:92, Str:98, GB:35, Cmd:78, Clu:78, Def:55, Frm:72, Sta:66, role:'SP', cat:'A' },
+      { id:'burnes', name:'Corbin Burnes', era:'MD', country:'USA', team:'Diamondbacks', Vel:94, Brk:95, Str:92, GB:70, Cmd:90, Clu:82, Def:70, Frm:82, Sta:84, role:'SP', cat:'A' },
+      { id:'yamamoto', name:'Yoshinobu Yamamoto', era:'MD', country:'JPN', team:'Dodgers', Vel:92, Brk:92, Str:92, GB:60, Cmd:92, Clu:82, Def:70, Frm:52, Sta:82, role:'SP', cat:'A' },
+      { id:'alcantara', name:'Sandy Alcántara', era:'MD', country:'DOM', team:'Marlins', Vel:96, Brk:90, Str:70, GB:92, Cmd:86, Clu:84, Def:86, Frm:90, Sta:96, role:'SP', cat:'A' },
+      { id:'sale', name:'Chris Sale', era:'MD', country:'USA', team:'Braves', Vel:93, Brk:97, Str:98, GB:45, Cmd:90, Clu:80, Def:60, Frm:92, Sta:78, role:'SP', cat:'A' },
+      { id:'hader', name:'Josh Hader', era:'MD', country:'USA', team:'Astros', Vel:94, Brk:92, Str:96, GB:40, Cmd:70, Clu:82, Def:55, Frm:80, Sta:35, role:'CL', cat:'A' },
+      { id:'diaz', name:'Edwin Díaz', era:'MD', country:'PRI', team:'Mets', Vel:99, Brk:96, Str:98, GB:40, Cmd:78, Clu:78, Def:55, Frm:72, Sta:35, role:'CL', cat:'A' },
+      { id:'bieber', name:'Shane Bieber', era:'MD', country:'USA', team:'Guardians', Vel:90, Brk:92, Str:92, GB:60, Cmd:95, Clu:76, Def:65, Frm:82, Sta:80, role:'SP', cat:'A' },
+      { id:'glavine', name:'Tom Glavine', era:'PE', country:'USA', team:'Braves', Vel:86, Brk:92, Str:88, GB:62, Cmd:94, Clu:90, Def:75, Frm:76, Sta:97, role:'SP', cat:'L' },
+      { id:'halladay', name:'Roy Halladay', era:'PE', country:'USA', team:'Phillies', Vel:94, Brk:93, Str:92, GB:70, Cmd:92, Clu:86, Def:78, Frm:84, Sta:96, role:'SP', cat:'L' },
+      { id:'smoltz', name:'John Smoltz', era:'PE', country:'USA', team:'Braves', Vel:94, Brk:90, Str:94, GB:45, Cmd:83, Clu:83, Def:60, Frm:85, Sta:92, role:'SP', cat:'L' },
+      { id:'schilling', name:'Curt Schilling', era:'PE', country:'USA', team:'Red Sox', Vel:94, Brk:91, Str:95, GB:60, Cmd:89, Clu:88, Def:62, Frm:82, Sta:90, role:'SP', cat:'L' },
+      { id:'gnau', name:'Greg Maddux', era:'PE', country:'USA', team:'Cubs', Vel:78, Brk:92, Str:67, GB:76, Cmd:99, Clu:89, Def:99, Frm:60, Sta:94, role:'SP', cat:'L' }
+    ];
+
+    const SLOT_DEFS = {
+      hitter: [
+        { key: 'Contact', label: 'Contact' },
+        { key: 'Power', label: 'Power' },
+        { key: 'Discipline', label: 'Discipline' },
+        { key: 'Vision', label: 'Vision' },
+        { key: 'Clutch', label: 'Clutch' },
+        { key: 'Speed', label: 'Speed' },
+        { key: 'Defense', label: 'Defense' },
+        { key: 'Frame', label: 'Frame' }
+      ],
+      pitcher: [
+        { key: 'Velocity', label: 'Velocity' },
+        { key: 'Break', label: 'Break' },
+        { key: 'Strikeout', label: 'Strikeout' },
+        { key: 'Ground Ball', label: 'Ground Ball' },
+        { key: 'Command', label: 'Command' },
+        { key: 'Clutch', label: 'Clutch' },
+        { key: 'Defense', label: 'Defense' },
+        { key: 'Frame', label: 'Frame' },
+        { key: 'Stamina', label: 'Stamina' }
+      ]
+    };
+
+    const POSITION_MAP = {
+      hitter: ['CF', 'RF', 'LF', 'SS', '3B', '2B', '1B', 'C', 'DH'],
+      pitcher: ['SP', 'RP', 'CL']
+    };
+
+    const ARCHETYPES = {
+      hitter: ['Slugger', 'Table Setter', 'Five Tool', 'Contact Artist', 'Glove First', 'Late Bloomer'],
+      pitcher: ['Power Arm', 'Groundballer', 'Finesse', 'Workhorse', 'Competitor', 'Fireballer']
+    };
+
+    const state = {
+      mode: 'hitter',
+      name: 'Rookie',
+      handed: 'R',
+      position: 'CF',
+      origin: 'High School',
+      archetype: 'Slugger',
+      currentCard: null,
+      assignmentMap: {},
+      career: null,
+      built: false
+    };
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function average(list) {
+      if (!list.length) return 0;
+      return list.reduce((sum, value) => sum + value, 0) / list.length;
+    }
+
+    function tierFromValue(value) {
+      if (value >= 95) return 'Legend';
+      if (value >= 90) return 'Diamond';
+      if (value >= 85) return 'Platinum';
+      if (value >= 78) return 'Gold';
+      if (value >= 70) return 'Silver';
+      if (value >= 60) return 'Bronze';
+      return 'Common';
+    }
+
+    function makePlayerCard(pool, mode) {
+      const player = pool[Math.floor(Math.random() * pool.length)];
+      const attrs = {}
+      for (const slot of SLOT_DEFS[mode]) {
+        const key = slot.key;
+        let value = player[key] ?? player[key === 'Strikeout' ? 'Str' : key === 'Ground Ball' ? 'GB' : key === 'Velocity' ? 'Vel' : key === 'Break' ? 'Brk' : key === 'Command' ? 'Cmd' : key === 'Stamina' ? 'Sta' : key === 'Frame' ? 'Frm' : key === 'Contact' ? 'Con' : key === 'Power' ? 'Pow' : key === 'Vision' ? 'Vis' : key === 'Discipline' ? 'Dis' : key === 'Clutch' ? 'Clu' : key === 'Speed' ? 'Spd' : key === 'Defense' ? 'Def' : key === 'Strikeout' ? 'Str' : 'Con'];
+        if (typeof value === 'undefined') value = Math.round(50 + Math.random() * 30);
+        attrs[key] = clamp(value, 30, 99);
+      }
+      return { player, attrs, tier: tierFromValue(Math.max(...Object.values(attrs))) };
+    }
+
+    function renderModeOptions() {
+      const posSelect = document.getElementById('positionInput');
+      const archSelect = document.getElementById('archetypeInput');
+      posSelect.innerHTML = '';
+      archSelect.innerHTML = '';
+
+      const positions = POSITION_MAP[state.mode];
+      positions.forEach((value) => {
+        const option = document.createElement('option');
+        option.value = value; option.textContent = value;
+        posSelect.appendChild(option);
+      });
+      state.position = posSelect.value;
+
+      ARCHETYPES[state.mode].forEach((value) => {
+        const option = document.createElement('option');
+        option.value = value; option.textContent = value;
+        archSelect.appendChild(option);
+      });
+      state.archetype = archSelect.value;
+    }
+
+    function updateMode(mode) {
+      state.mode = mode;
+      document.querySelectorAll('.pill').forEach((button) => {
+        button.classList.toggle('active', button.dataset.mode === mode);
+      });
+      renderModeOptions();
+      resetBuild();
+    }
+
+    function resetBuild() {
+      state.assignmentMap = {};
+      state.currentCard = null;
+      state.built = false;
+      renderSlots();
+      renderReel();
+      updateProjectedOverall();
+      document.getElementById('careerSection').classList.remove('visible');
+    }
+
+    function renderSlots() {
+      const board = document.getElementById('slotBoard');
+      board.innerHTML = '';
+      const slots = SLOT_DEFS[state.mode];
+      slots.forEach((slot) => {
+        const div = document.createElement('button');
+        div.className = 'slot ' + (state.assignmentMap[slot.key] ? 'filled' : 'empty');
+        div.type = 'button';
+        div.innerHTML = `
+          <div class="slotLabel">${slot.label}</div>
+          <div class="slotValue">${state.assignmentMap[slot.key] ?? '--'}</div>
+        `;
+        div.addEventListener('click', () => {
+          if (!state.currentCard) return;
+          if (state.assignmentMap[slot.key] !== undefined) return;
+          state.assignmentMap[slot.key] = state.currentCard.attrs[slot.key];
+          state.currentCard = null;
+          renderSlots();
+          renderReel();
+          updateProjectedOverall();
+        });
+        board.appendChild(div);
+      });
+    }
+
+    function renderReel() {
+      const nameEl = document.getElementById('playerName');
+      const metaEl = document.getElementById('playerMetaLabel');
+      const ratingEl = document.getElementById('reelOverall');
+      const statGrid = document.getElementById('reelAttributes');
+      if (!state.currentCard) {
+        nameEl.textContent = 'Waiting for a spin';
+        metaEl.textContent = 'Current card';
+        ratingEl.textContent = '--';
+        statGrid.innerHTML = '';
+        return;
+      }
+      const card = state.currentCard;
+      const player = card.player;
+      nameEl.textContent = player.name;
+      metaEl.textContent = `${player.team} • ${player.era} • ${player.country}`;
+      const overall = average(Object.values(card.attrs));
+      ratingEl.textContent = Math.round(overall);
+      statGrid.innerHTML = '';
+      Object.entries(card.attrs).forEach(([key, value]) => {
+        const el = document.createElement('div');
+        el.className = 'miniStat';
+        el.innerHTML = `<div class="k">${key}</div><div class="v">${value}</div>`;
+        statGrid.appendChild(el);
+      });
+    }
+
+    function updateProjectedOverall() {
+      const slots = SLOT_DEFS[state.mode];
+      const entries = slots.filter((slot) => state.assignmentMap[slot.key] !== undefined)
+        .map((slot) => [slot.key, state.assignmentMap[slot.key]]);
+      const overall = calculateOverall(entries);
+      document.getElementById('projectedOverall').textContent = Math.round(overall);
+      document.getElementById('buildStatus').textContent = `${entries.length} / ${slots.length}`;
+      const tags = [];
+      if (overall >= 85) tags.push('Star');
+      if (overall >= 75) tags.push('Ready');
+      if (entries.length >= slots.length * 0.75) tags.push('Strong');
+      if (state.currentCard) tags.push('Live');
+      document.getElementById('powerTagList').innerHTML = tags.map((tag) => `<span class="tag good">${tag}</span>`).join('');
+      const draftStock = Math.round(overall + (state.origin === 'College' ? 4 : 0) + (state.origin === 'International' ? 6 : 0) + (state.archetype === 'Five Tool' ? 3 : 0));
+      document.getElementById('draftStock').textContent = `${draftStock} / 99`;
+    }
+
+    function calculateOverall(entries) {
+      const weights = {
+        hitter: {
+          Contact: 1.25, Power: 1.2, Discipline: 1.1, Vision: 1.1, Clutch: 1.0, Speed: 0.9, Defense: 1.0, Frame: 0.5,
+        },
+        pitcher: {
+          Strikeout: 1.25, 'Ground Ball': 1.1, Command: 1.25, Velocity: 1.0, Break: 1.1, Stamina: 1.0, Clutch: 1.0, Defense: 0.5, Frame: 0.5,
+        }
+      };
+      const map = Object.fromEntries(entries);
+      const totalWeight = Object.entries(map).reduce((sum, [key, value]) => sum + (weights[state.mode][key] || 1), 0);
+      if (!totalWeight) return 0;
+      const weighted = Object.entries(map).reduce((sum, [key, value]) => sum + value * (weights[state.mode][key] || 1), 0);
+      return weighted / totalWeight;
+    }
+
+    function spinBuild() {
+      const pool = state.mode === 'hitter' ? hitterPool : pitcherPool;
+      const card = makePlayerCard(pool, state.mode);
+      state.currentCard = card;
+      renderReel();
+      renderSlots();
+    }
+
+    function quickFill() {
+      state.assignmentMap = {};
+      const slots = SLOT_DEFS[state.mode];
+      const pool = state.mode === 'hitter' ? hitterPool : pitcherPool;
+      slots.forEach((slot) => {
+        const card = makePlayerCard(pool, state.mode);
+        state.assignmentMap[slot.key] = card.attrs[slot.key];
+      });
+      state.currentCard = null;
+      renderSlots();
+      renderReel();
+      updateProjectedOverall();
+    }
+
+    function simulateCareer() {
+      const totalAssigned = Object.keys(state.assignmentMap).length;
+      const slots = SLOT_DEFS[state.mode];
+      if (totalAssigned < slots.length) {
+        alert('Fill all slots before starting your career.');
+        return;
+      }
+
+      const currentOverall = Math.round(calculateOverall(Object.entries(state.assignmentMap)));
+      const buildValue = currentOverall;
+      const careerYears = [];
+      const randomize = (base, spread) => clamp(base + (Math.random() - 0.5) * spread, 0, 999);
+
+      const seasons = state.mode === 'hitter' ? 8 : 7;
+      for (let year = 1; year <= seasons; year++) {
+        if (state.mode === 'hitter') {
+          const avg = clamp(0.255 + (buildValue - 55) / 400 + (Math.random() - 0.5) * 0.05, 0.210, 0.360);
+          const hr = clamp(8 + ((buildValue - 60) / 2) + Math.random() * 18, 4, 55);
+          const rbi = clamp(45 + (buildValue - 50) * 1.2 + Math.random() * 70, 30, 150);
+          const sb = clamp((state.assignmentMap.Speed || 60) / 4.5 + Math.random() * 15, 0, 60);
+          const war = clamp(0.8 + ((buildValue - 50) / 16) + Math.random() * 4.2, 0.2, 10.8);
+          const award = year % 4 === 0 ? 'All-Star' : year === 1 ? 'Rookie of the Year' : (Math.random() > 0.7 ? 'Silver Slugger' : '');
+          careerYears.push({ year, title: `Season ${year}`, stats: `AVG ${avg.toFixed(3)} • HR ${Math.round(hr)} • RBI ${Math.round(rbi)} • SB ${Math.round(sb)} • WAR ${war.toFixed(1)}${award ? ` • ${award}` : ''}` });
+        } else {
+          const era = clamp(2.8 - ((buildValue - 60) / 20) + (Math.random() - 0.5) * 1.0, 1.6, 5.0);
+          const strikeouts = clamp(120 + (buildValue - 50) * 3 + Math.random() * 90, 80, 320);
+          const wins = clamp(6 + (buildValue - 60) * 0.35 + Math.random() * 12, 3, 24);
+          const war = clamp(0.9 + ((buildValue - 50) / 14) + Math.random() * 4.5, 0.6, 10.5);
+          const award = year % 4 === 0 ? 'Cy Young' : year === 1 ? 'Rookie of the Year' : (Math.random() > 0.75 ? 'ERA Title' : '');
+          careerYears.push({ year, title: `Season ${year}`, stats: `W ${Math.round(wins)} • ERA ${era.toFixed(2)} • K ${Math.round(strikeouts)} • WAR ${war.toFixed(1)}${award ? ` • ${award}` : ''}` });
+        }
+      }
+
+      const legacy = clamp((currentOverall * 1.35) + (careerYears.length * 3.8) + (state.mode === 'hitter' ? 16 : 14), 0, 99);
+      const verdict = legacy >= 80 ? 'Hall of Famer' : legacy >= 62 ? 'All-Star Track' : legacy >= 40 ? 'Solid Regular' : legacy >= 20 ? 'Role Player' : 'Cup of Coffee';
+
+      state.career = {
+        title: `${state.name} • ${state.mode === 'hitter' ? 'Hitter' : 'Pitcher'} career`,
+        overall: currentOverall,
+        legacy,
+        verdict,
+        seasons: careerYears,
+        position: state.position,
+        origin: state.origin,
+        archetype: state.archetype,
+        team: state.mode === 'hitter' ? 'Drafted to a contender' : 'Developed as a starter'
+      };
+
+      renderCareer();
+    }
+
+    function renderCareer() {
+      const section = document.getElementById('careerSection');
+      const summary = document.getElementById('careerSummary');
+      const list = document.getElementById('seasonList');
+      if (!state.career) return;
+      section.classList.add('visible');
+      summary.innerHTML = `
+        <div class="miniStat"><div class="k">Name</div><div class="v">${state.name}</div></div>
+        <div class="miniStat"><div class="k">Overall</div><div class="v">${state.career.overall}</div></div>
+        <div class="miniStat"><div class="k">Legacy</div><div class="v">${state.career.legacy.toFixed(1)}</div></div>
+        <div class="miniStat"><div class="k">Verdict</div><div class="v">${state.career.verdict}</div></div>
+      `;
+      list.innerHTML = state.career.seasons.map((season) => `
+        <div class="seasonCard">
+          <div class="seasonTop">
+            <strong>${season.title}</strong>
+            <div class="seasonMeta">${season.stats}</div>
+          </div>
+          <div class="timeline">
+            <span class="chip">${state.mode === 'hitter' ? 'Plate discipline' : 'Bullpen pressure'}</span>
+            <span class="chip">${state.origin}</span>
+            <span class="chip">${state.archetype}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function attachHandlers() {
+      document.querySelectorAll('.pill').forEach((button) => {
+        button.addEventListener('click', () => updateMode(button.dataset.mode));
+      });
+
+      document.getElementById('nameInput').addEventListener('input', (event) => {
+        state.name = event.target.value.trim() || 'Rookie';
+      });
+
+      document.getElementById('handInput').addEventListener('change', (event) => {
+        state.handed = event.target.value;
+      });
+
+      document.getElementById('positionInput').addEventListener('change', (event) => {
+        state.position = event.target.value;
+      });
+
+      document.getElementById('originInput').addEventListener('change', (event) => {
+        state.origin = event.target.value;
+        updateProjectedOverall();
+      });
+
+      document.getElementById('archetypeInput').addEventListener('change', (event) => {
+        state.archetype = event.target.value;
+        updateProjectedOverall();
+      });
+
+      document.getElementById('spinBtn').addEventListener('click', spinBuild);
+      document.getElementById('autoFillBtn').addEventListener('click', quickFill);
+      document.getElementById('resetBtn').addEventListener('click', resetBuild);
+      document.getElementById('careerBtn').addEventListener('click', simulateCareer);
+    }
+
+    function init() {
+      renderModeOptions();
+      attachHandlers();
+      resetBuild();
+    }
+
+    init();
+  </script>
+</body>
+</html>
